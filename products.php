@@ -2,7 +2,18 @@
 <?php
 include_once('admin/connection.php');
 
-$show = "SELECT * FROM products";
+if (isset($_GET['page'])) {
+  $page = $_GET['page'];
+} else {
+  $page = 1;
+}
+
+$product_per_page = 12;
+$start_from = ($page - 1) * $product_per_page;
+// echo $start_from;
+// exit();
+
+$show = "SELECT * FROM products limit $start_from, $product_per_page";
 $show_query = mysqli_query($conn, $show);
 ?>
 
@@ -127,23 +138,49 @@ $show_query = mysqli_query($conn, $show);
           </div>
         <?php } ?>
       </div>
-      <div class="container mt-4">
-        <nav aria-label="...">
-          <ul class="pagination justify-content-center">
-            <li class="page-item disabled">
-              <a class="page-link">Previous</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item active" aria-current="page">
-              <a class="page-link" href="#">2</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-              <a class="page-link" href="#">Next</a>
-            </li>
-          </ul>
-        </nav>
-      </div>
+      <?php
+$pr_query = "SELECT * FROM products";
+$pr_result = mysqli_query($conn, $pr_query);
+$total_record = mysqli_num_rows($pr_result);
+
+$product_per_page = 10; // Assuming you want 10 products per page
+$total_pages = ceil($total_record / $product_per_page);
+
+echo '<div class="container mt-4">';
+echo '<nav aria-label="...">';
+echo '<ul class="pagination justify-content-center">';
+
+// Previous button (disabled if on the first page)
+if (isset($_GET['page']) && $_GET['page'] > 1) {
+    $prev_page = $_GET['page'] - 1;
+    echo '<li class="page-item"><a class="page-link" href="products.php?page=' . $prev_page . '">Previous</a></li>';
+} else {
+    echo '<li class="page-item disabled"><a class="page-link">Previous</a></li>';
+}
+
+// Page numbers
+for ($i = 1; $i <= $total_pages; $i++) {
+    if (isset($_GET['page']) && $_GET['page'] == $i) {
+        echo '<li class="page-item active" aria-current="page"><a class="page-link" href="products.php?page=' . $i . '">' . $i . '</a></li>';
+    } else {
+        echo '<li class="page-item"><a class="page-link" href="products.php?page=' . $i . '">' . $i . '</a></li>';
+    }
+}
+
+// Next button (disabled if on the last page)
+if (isset($_GET['page']) && $_GET['page'] < $total_pages) {
+    $next_page = $_GET['page'] + 1;
+    echo '<li class="page-item"><a class="page-link" href="products.php?page=' . $next_page . '">Next</a></li>';
+} elseif (!isset($_GET['page']) || $_GET['page'] == $total_pages) {
+    echo '<li class="page-item disabled"><a class="page-link">Next</a></li>';
+}
+
+echo '</ul>';
+echo '</nav>';
+echo '</div>';
+?>
+
+      
     </div>
 
 
