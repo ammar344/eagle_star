@@ -1,6 +1,26 @@
 <!-- php -->
 <?php
 include_once('admin/connection.php');
+
+// subcribe form
+if(isset($_REQUEST['subscribe'])){
+    $subEmail = $_REQUEST['semail'];
+    // check email 
+    $checkEmail = "SELECT * FROM subscribes WHERE semail = '$subEmail'";
+    $check_query = mysqli_query($conn, $checkEmail);
+    $email_show = mysqli_fetch_array($check_query);
+    if($email_show){
+        header('Location: ./about.php');
+    }else{
+    $insert = "INSERT INTO subscribes (semail) VALUES ('$subEmail')";
+    $insert_query = mysqli_query($conn, $insert);
+    if($insert_query){
+        header('Location: ./about.php');
+    }else{
+        echo "error";
+    }
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -133,7 +153,7 @@ include_once('admin/connection.php');
                     </div>
                     <div class="col-md-8 offset-md-2">
                         <div class="container">
-                            <form id="subscribe" action="admin/server.php" method="get">
+                            <form id="subscribe" action="" method="get">
                                 <div class="row">
                                     <div class="col-md-7">
                                         <fieldset>
@@ -143,7 +163,6 @@ include_once('admin/connection.php');
                                     </div>
                                     <div class="col-md-5">
                                         <fieldset>
-                                            <input type="hidden" name="cmd" value="subscribe">
                                             <button type="submit" id="form-submit" class="btn button mt-2 mt-md-0 mt-lg-0" name="subscribe">
                                                 Subscribe Now!
                                             </button>

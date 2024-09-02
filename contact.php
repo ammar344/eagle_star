@@ -1,6 +1,43 @@
 <!-- PHP -->
 <?php
 include_once('admin/connection.php');
+
+// contact form
+if(isset($_REQUEST['submit'])){
+    $cName = $_REQUEST['name'];
+    $cEmail = $_REQUEST['email'];
+    $cSubject = $_REQUEST['subject'];
+    $cMessage = $_REQUEST['message'];
+
+    $insert = "INSERT INTO contact_us (cName, cEmail, cSubject, cMessage) VALUES ('$cName', '$cEmail', '$cSubject', '$cMessage')";
+    $insert_query = mysqli_query($conn, $insert);
+    if($insert_query){
+        header('Location: ./contact.php');
+    }else{
+        echo"error";
+    }
+}
+
+// subcribe form
+if(isset($_REQUEST['subscribe'])){
+    $subEmail = $_REQUEST['semail'];
+    // check email 
+    $checkEmail = "SELECT * FROM subscribes WHERE semail = '$subEmail'";
+    $check_query = mysqli_query($conn, $checkEmail);
+    $email_show = mysqli_fetch_array($check_query);
+    if($email_show){
+        header('Location: ./contact.php');
+    }else{
+    $insert = "INSERT INTO subscribes (semail) VALUES ('$subEmail')";
+    $insert_query = mysqli_query($conn, $insert);
+    if($insert_query){
+        header('Location: ./contact.php');
+    }else{
+        echo "error";
+    }
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -95,7 +132,7 @@ include_once('admin/connection.php');
                                     <div class="row">
                                         <div class="col-md-6 mt-4 mt-md-0 mt-lg-0">
                                             <fieldset>
-                                                <input type="text" class="form-control" id="name" placeholder="Enter Name...">
+                                                <input type="text" name="name" class="form-control" id="name" placeholder="Enter Name...">
                                             </fieldset>
                                         </div>
                                         <div class="col-md-6 mt-4 mt-md-0 mt-lg-0">
@@ -113,6 +150,13 @@ include_once('admin/connection.php');
                                                 <textarea name="message" id="message" rows="6" class="form-control" placeholder="Enter your message here..."></textarea>
                                             </fieldset>
                                         </div>
+                                        <div class="col-md-5 mt-4">
+                                        <fieldset>
+                                            <button type="submit" id="form-submit" class="btn contact_button mt-2 mt-md-0 mt-lg-0" name="submit">
+                                                Submit!
+                                            </button>
+                                        </fieldset>
+                                    </div>
                                     </div>
                                 </form>
                             </div>
@@ -135,7 +179,7 @@ include_once('admin/connection.php');
                     </div>
                     <div class="col-md-8 offset-md-2">
                         <div class="container">
-                            <form id="subscribe" action="admin/server.php" method="get">
+                            <form id="subscribe" action="" method="get">
                                 <div class="row">
                                     <div class="col-md-7">
                                         <fieldset>
@@ -145,7 +189,6 @@ include_once('admin/connection.php');
                                     </div>
                                     <div class="col-md-5">
                                         <fieldset>
-                                            <input type="hidden" name="cmd" value="subscribe">
                                             <button type="submit" id="form-submit" class="btn button mt-2 mt-md-0 mt-lg-0" name="subscribe">
                                                 Subscribe Now!
                                             </button>

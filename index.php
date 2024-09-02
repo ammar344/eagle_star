@@ -2,6 +2,26 @@
 <?php
 include_once('admin/connection.php');
 
+// subcribe form
+if(isset($_REQUEST['subscribe'])){
+    $subEmail = $_REQUEST['semail'];
+    // check email 
+    $checkEmail = "SELECT * FROM subscribes WHERE semail = '$subEmail'";
+    $check_query = mysqli_query($conn, $checkEmail);
+    $email_show = mysqli_fetch_array($check_query);
+    if($email_show){
+        header('Location: ./index.php');
+    }else{
+    $insert = "INSERT INTO subscribes (semail) VALUES ('$subEmail')";
+    $insert_query = mysqli_query($conn, $insert);
+    if($insert_query){
+        header('Location: ./index.php');
+    }else{
+        echo "error";
+    }
+    }
+}
+
 $show = "SELECT * FROM featured_items";
 $show_query = mysqli_query($conn, $show);
 ?>
@@ -98,7 +118,7 @@ $show_query = mysqli_query($conn, $show);
                                     $fName = $row['featured_name'];
                                     $fprice = $row['featured_price'];
                                 ?>
-                                    <a href="">
+                                    <a href="order-page.php">
                                         <div class="featured-item">
                                             <img src="<?php echo $imagePath; ?>" alt="<?php echo $pName; ?>" alt="" />
                                             <h4>
@@ -140,7 +160,6 @@ $show_query = mysqli_query($conn, $show);
                                     </div>
                                     <div class="col-md-5">
                                         <fieldset>
-                                            <input type="hidden" name="cmd" value="subscribe">
                                             <button type="submit" id="form-submit" class="btn button mt-2 mt-md-0 mt-lg-0" name="subscribe">
                                                 Subscribe Now!
                                             </button>

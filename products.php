@@ -2,6 +2,26 @@
 <?php
 include_once('admin/connection.php');
 
+// subcribe form
+if(isset($_REQUEST['subscribe'])){
+  $subEmail = $_REQUEST['semail'];
+  // check email 
+  $checkEmail = "SELECT * FROM subscribes WHERE semail = '$subEmail'";
+  $check_query = mysqli_query($conn, $checkEmail);
+  $email_show = mysqli_fetch_array($check_query);
+  if($email_show){
+      header('Location: ./product.php');
+  }else{
+  $insert = "INSERT INTO subscribes (semail) VALUES ('$subEmail')";
+  $insert_query = mysqli_query($conn, $insert);
+  if($insert_query){
+      header('Location: ./products.php');
+  }else{
+      echo "error";
+  }
+  }
+}
+
 if (isset($_GET['page'])) {
   $page = $_GET['page'];
 } else {
@@ -85,7 +105,7 @@ $show_query = mysqli_query($conn, $show);
 
   <!-- main start -->
   <div class="main">
-    <!-- featured section start -->
+    <!-- product section start -->
 
     <div class="featured-page">
       <div class="container">
@@ -123,7 +143,7 @@ $show_query = mysqli_query($conn, $show);
           $pPrice = $row['price'];
         ?>
           <div id="1" class="item new col-md-4 mt-4">
-            <a href="single-product.php">
+            <a href="order-page.php">
               <div class="featured-item" id="product">
                 <img src="<?php echo $imagePath; ?>" alt="<?php echo $pName; ?>" class="productImg"
                   style="height: 250px; width: 330" />
@@ -184,7 +204,7 @@ echo '</div>';
     </div>
 
 
-    <!-- featured section end -->
+    <!-- product section end -->
 
     <!-- subscribe-form start -->
 
@@ -199,7 +219,7 @@ echo '</div>';
           </div>
           <div class="col-md-8 offset-md-2">
             <div class="container">
-              <form id="subscribe" action="admin/server.php" method="get">
+              <form id="subscribe" action="" method="get">
                 <div class="row">
                   <div class="col-md-7">
                     <fieldset>
@@ -208,7 +228,6 @@ echo '</div>';
                   </div>
                   <div class="col-md-5">
                     <fieldset>
-                      <input type="hidden" name="cmd" value="subscribe">
                       <button type="submit" id="form-submit" class="btn button mt-2 mt-md-0 mt-lg-0" name="subscribe">
                         Subscribe Now!
                       </button>

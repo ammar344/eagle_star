@@ -300,29 +300,31 @@ a{
 	height: 250px;
 	width: 350px;
 }
-/* Isotope Transitions
-------------------------------- */
-/* .isotope,
-.isotope .item {
-  -webkit-transition-duration: 0.8s;
-     -moz-transition-duration: 0.8s;
-      -ms-transition-duration: 0.8s;
-       -o-transition-duration: 0.8s;
-          transition-duration: 0.8s;
-}
 
-.isotope {
-  -webkit-transition-property: height, width;
-     -moz-transition-property: height, width;
-      -ms-transition-property: height, width;
-       -o-transition-property: height, width;
-          transition-property: height, width;
+/* contact page */
+.contact_button {
+	width: 100%;
+	height: 46px;
+	cursor: pointer;
+	background-color: var(--primary-color) !important;
+	color: var(--white-color);
+	outline: none;
+	border-radius: 5px;
+	padding: 10px 15px;
+	display: inline-block;
+	font-size: 14px;
+	text-transform: uppercase;
+	font-weight: 300;
+	letter-spacing: 0.4px;
+	text-decoration: none;
+	transition: all 0.5s;
+	box-shadow: none;
+	border: none;
 }
+.contact_button:hover {
+	background-color: var(--button-color)!important;
+    color: var(--white-color);
+    border: 1px solid var(--border-color);
+    transition: all 0.5s;
 
-.isotope .item {
-  -webkit-transition-property: -webkit-transform, opacity;
-     -moz-transition-property:    -moz-transform, opacity;
-      -ms-transition-property:     -ms-transform, opacity;
-       -o-transition-property:         top, left, opacity;
-          transition-property:         transform, opacity;
-} */
+}
