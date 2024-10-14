@@ -20,5 +20,5 @@ $('.owl-carousel').owlCarousel({
     }
 });
 
-// alert
+
 

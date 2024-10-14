@@ -1,6 +1,7 @@
 <!-- PHP -->
 <?php
-include_once('admin/connection.php');
+include_once('connection.php');
+session_start();
 
 // subcribe form
 if(isset($_REQUEST['subscribe'])){
@@ -10,17 +11,19 @@ if(isset($_REQUEST['subscribe'])){
   $check_query = mysqli_query($conn, $checkEmail);
   $email_show = mysqli_fetch_array($check_query);
   if($email_show){
-      header('Location: ./product.php');
+      header('Location: ./products.php?page=1');
   }else{
   $insert = "INSERT INTO subscribes (semail) VALUES ('$subEmail')";
   $insert_query = mysqli_query($conn, $insert);
   if($insert_query){
-      header('Location: ./products.php');
+      header('Location: ./products.php?page=1');
   }else{
       echo "error";
   }
   }
 }
+
+// pagination
 
 if (isset($_GET['page'])) {
   $page = $_GET['page'];
@@ -28,12 +31,11 @@ if (isset($_GET['page'])) {
   $page = 1;
 }
 
-$product_per_page = 12;
+$product_per_page = 16;
 $start_from = ($page - 1) * $product_per_page;
-// echo $start_from;
-// exit();
 
-$show = "SELECT * FROM products limit $start_from, $product_per_page";
+
+$show = "SELECT * FROM products ORDER BY date DESC LIMIT $start_from, $product_per_page"; 
 $show_query = mysqli_query($conn, $show);
 ?>
 
@@ -47,19 +49,12 @@ $show_query = mysqli_query($conn, $show);
   <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico" />
 
   <!-- bootstrap css -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-    integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous" />
-
+  <link rel="stylesheet" href="./vendor/bootstrap/css/bootstrap.min.css">
   <!-- other css -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
-    integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="./vendor/others/css/owl.css" />
 
-  <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
-    integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="./vendor/others/css/owl.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <!-- custom css -->
   <link rel="stylesheet" href="./assets/css/style.css" />
 
@@ -87,7 +82,7 @@ $show_query = mysqli_query($conn, $show);
               <a class="nav-link" href="index.php">Home </a>
             </li>
             <li class="nav-item active">
-              <a class="nav-link" href="products.php">Products</a>
+              <a class="nav-link" href="products.php?page=1">Products</a>
               <span class="sr-only">(current)</span>
             </li>
             <li class="nav-item">
@@ -95,6 +90,20 @@ $show_query = mysqli_query($conn, $show);
             </li>
             <li class="nav-item">
               <a class="nav-link" href="contact.php">Contact Us</a>
+            </li>
+            <?php 
+            $count = 0;
+            if(isset($_SESSION['cart'])){
+                $count = count($_SESSION['cart']);
+            }
+            ?>
+            <li class="nav-item cart">
+              <a class="nav-link" href="my_cart.php"><i class="fas fa-shopping-cart"></i>
+                <span class="cart-count">
+                  <?php echo $count; ?>
+                </span>
+              </a>
+
             </li>
           </ul>
         </div>
@@ -116,20 +125,6 @@ $show_query = mysqli_query($conn, $show);
               <h1 class="heading">Our Products</h1>
             </div>
           </div>
-          <div class="col-md-8 col-sm-12">
-            <div class="button-group" id="filters">
-              <button class="btn btn-primary" data-filter="*">
-                All Products
-              </button>
-              <button class="btn btn-primary" data-filter=".new">Newest</button>
-              <button class="btn btn-primary" data-filter=".low">
-                Low Price
-              </button>
-              <button class="btn btn-primary" data-filter=".high">
-                High Price
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -138,32 +133,52 @@ $show_query = mysqli_query($conn, $show);
         <?php
         // show data in card from database
         while ($row = mysqli_fetch_assoc($show_query)) {
-          $imagePath = "./admin/product_images/" . $row['image'];
+          $imagePath = "./admin/123/product_images/" . $row['image'];
           $pName = $row['product_name'];
+          $productId = $row['id'];
           $pPrice = $row['price'];
+          $pcode = $row['productCode'];
         ?>
-          <div id="1" class="item new col-md-4 mt-4">
-            <a href="order-page.php">
-              <div class="featured-item" id="product">
-                <img src="<?php echo $imagePath; ?>" alt="<?php echo $pName; ?>" class="productImg"
-                  style="height: 250px; width: 330" />
-                <h4>
-                  <?php echo $pName; ?>
-                </h4>
-                <h6>
-                  <?php echo $pPrice; ?>
-                </h6>
+
+        <div id="1" class="item new col-md-3 mt-4">
+          <form action="manage_cart.php" method="POST">
+            <div class="featured-item" id="product">
+              <img src="<?php echo $imagePath; ?>" alt="<?php echo $pName; ?>" class="productImg"
+                style="height: 250px; width: 330" />
+              <h4>
+                <?php echo $pName; ?>
+              </h4>
+              <h6>
+                Rs.
+                <?php echo $pPrice; ?>
+              </h6>
+              <label for="quantity">Quantity:</label>
+              <input value="1" name="quantity" type="number" class="form-control quantity-text-card" id="quantity">
+              <input type="hidden" value="<?php echo $productId?>" name="productId">
+              <input type="hidden" value="<?php echo $pcode?>" name="productCode">
+              <input type="hidden" value="<?php echo $pName?>" name="productName">
+              <input type="hidden" value="<?php echo $pPrice?>" name="productPrice">
+              <div class="row">
+                <div class="col-md-5 mt-2">
+                  <a class="btn btn-primary btn-p" href="single-product.php?id=<?php echo $row['id'] ?>" value=""
+                    style="width: 100%;">Details</a>
+                </div>
+                <div class="col-md-7 mt-2">
+                  <button class="btn btn-primary btn-p" name="add_to_cart" style="width: 100%;">Add to Cart</button>
+                </div>
               </div>
-            </a>
-          </div>
+            </div>
+          </form>
+        </div>
         <?php } ?>
       </div>
+
       <?php
 $pr_query = "SELECT * FROM products";
 $pr_result = mysqli_query($conn, $pr_query);
 $total_record = mysqli_num_rows($pr_result);
 
-$product_per_page = 10; // Assuming you want 10 products per page
+$product_per_page = 16; // Assuming you want 10 products per page
 $total_pages = ceil($total_record / $product_per_page);
 
 echo '<div class="container mt-4">';
@@ -181,7 +196,7 @@ if (isset($_GET['page']) && $_GET['page'] > 1) {
 // Page numbers
 for ($i = 1; $i <= $total_pages; $i++) {
     if (isset($_GET['page']) && $_GET['page'] == $i) {
-        echo '<li class="page-item active" aria-current="page"><a class="page-link" href="products.php?page=' . $i . '">' . $i . '</a></li>';
+        echo '<li class="page-item active active-page" aria-current="page"><a class="page-link active-page" href="products.php?page=' . $i . '">' . $i . '</a></li>';
     } else {
         echo '<li class="page-item"><a class="page-link" href="products.php?page=' . $i . '">' . $i . '</a></li>';
     }
@@ -200,7 +215,7 @@ echo '</nav>';
 echo '</div>';
 ?>
 
-      
+
     </div>
 
 
@@ -256,10 +271,10 @@ echo '</div>';
         <div class="col-md-12 mt-2">
           <div class="social-icons">
             <ul class="d-flex justify-content-center">
-              <li><a href=""><i class="fa fa-facebook mt-2"></i></a></li>
-              <li class="ml-4"><a href="#"><i class="fa fa-twitter mt-2"></i></a></li>
-              <li class="ml-4"><a href="#"><i class="fa fa-linkedin mt-2"></i></a></li>
-              <li class="ml-4"><a href="#"><i class="fa fa-rss mt-2"></i></a></li>
+              <li><a href=""><i class="fab fa-facebook mt-2"></i></a></li>
+              <li class="ml-4"><a href="#"><i class="fab fa-whatsapp mt-2"></i></a></li>
+              <li class="ml-4"><a href="#"><i class="fab fa-linkedin mt-2"></i></a></li>
+              <li class="ml-4"><a href="#"><i class="fab fa-instagram mt-2"></i></a></li>
             </ul>
           </div>
         </div>
@@ -269,21 +284,13 @@ echo '</div>';
 
 
   <!-- Bootstrap core JavaScript -->
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
-    crossorigin="anonymous"></script>
+  <script src="./vendor/jquery/jquery.slim.min.js"></script>
+
+  <script src="./vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
   <!-- Additional Scripts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-    integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
-    integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <!-- <script src="./assets/js/isotope.js"></script> -->
+  <script src="./vendor/jquery/jquery.min.js"></script>
+  <script src="./vendor/others/js/owl.js"></script>
   <!-- Additional Scripts -->
   <script src="assets/js/main.js"></script>
 

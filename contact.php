@@ -1,40 +1,42 @@
 <!-- PHP -->
 <?php
-include_once('admin/connection.php');
+include_once('connection.php');
+session_start();
 
 // contact form
-if(isset($_REQUEST['submit'])){
+if (isset($_REQUEST['submit'])) {
     $cName = $_REQUEST['name'];
-    $cEmail = $_REQUEST['email'];
+    $cEmail = $_REQUEST['cemail'];
     $cSubject = $_REQUEST['subject'];
     $cMessage = $_REQUEST['message'];
 
     $insert = "INSERT INTO contact_us (cName, cEmail, cSubject, cMessage) VALUES ('$cName', '$cEmail', '$cSubject', '$cMessage')";
     $insert_query = mysqli_query($conn, $insert);
-    if($insert_query){
+    if ($insert_query) {
         header('Location: ./contact.php');
-    }else{
-        echo"error";
+    } else {
+        echo "error";
     }
+
 }
 
 // subcribe form
-if(isset($_REQUEST['subscribe'])){
+if (isset($_REQUEST['subscribe'])) {
     $subEmail = $_REQUEST['semail'];
     // check email 
     $checkEmail = "SELECT * FROM subscribes WHERE semail = '$subEmail'";
     $check_query = mysqli_query($conn, $checkEmail);
     $email_show = mysqli_fetch_array($check_query);
-    if($email_show){
+    if ($email_show) {
         header('Location: ./contact.php');
-    }else{
-    $insert = "INSERT INTO subscribes (semail) VALUES ('$subEmail')";
-    $insert_query = mysqli_query($conn, $insert);
-    if($insert_query){
-        header('Location: ./contact.php');
-    }else{
-        echo "error";
-    }
+    } else {
+        $insert = "INSERT INTO subscribes (semail) VALUES ('$subEmail')";
+        $insert_query = mysqli_query($conn, $insert);
+        if ($insert_query) {
+            header('Location: ./contact.php');
+        } else {
+            echo "error";
+        }
     }
 }
 
@@ -44,27 +46,20 @@ if(isset($_REQUEST['subscribe'])){
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Elite Hosiery & Garments</title>
-    <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elite Hosiery & Garments</title>
+  <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico" />
 
-    <!-- bootstrap css -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous" />
+  <!-- bootstrap css -->
+  <link rel="stylesheet" href="./vendor/bootstrap/css/bootstrap.min.css">
+  <!-- other css -->
+  <link rel="stylesheet" href="./vendor/others/css/owl.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-    <!-- other css -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
-        integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- custom css -->
+  <link rel="stylesheet" href="./assets/css/style.css" />
 
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
-        integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- custom css -->
-    <link rel="stylesheet" href="./assets/css/style.css" />
 </head>
 
 <body>
@@ -91,7 +86,7 @@ if(isset($_REQUEST['subscribe'])){
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="products.php">Products</a>
+                            <a class="nav-link" href="products.php?page=1">Products</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="about.php">About Us</a>
@@ -101,6 +96,20 @@ if(isset($_REQUEST['subscribe'])){
                                 <span class="sr-only">(current)</span>
                             </a>
                         </li>
+                        <?php 
+            $count = 0;
+            if(isset($_SESSION['cart'])){
+                $count = count($_SESSION['cart']);
+            }
+            ?>
+            <li class="nav-item cart">
+              <a class="nav-link" href="my_cart.php"><i class="fas fa-shopping-cart"></i>
+                <span class="cart-count">
+                  <?php echo $count; ?>
+                </span>
+              </a>
+
+            </li>
                     </ul>
                 </div>
             </div>
@@ -137,7 +146,7 @@ if(isset($_REQUEST['subscribe'])){
                                         </div>
                                         <div class="col-md-6 mt-4 mt-md-0 mt-lg-0">
                                             <fieldset>
-                                                <input type="email" name="" class="form-control" id="email" placeholder="Enter Email...">
+                                                <input type="email" name="cemail" class="form-control" id="email" placeholder="Enter Email...">
                                             </fieldset>
                                         </div>
                                         <div class="col-md-12 mt-4">
@@ -150,13 +159,13 @@ if(isset($_REQUEST['subscribe'])){
                                                 <textarea name="message" id="message" rows="6" class="form-control" placeholder="Enter your message here..."></textarea>
                                             </fieldset>
                                         </div>
-                                        <div class="col-md-5 mt-4">
-                                        <fieldset>
-                                            <button type="submit" id="form-submit" class="btn contact_button mt-2 mt-md-0 mt-lg-0" name="submit">
-                                                Submit!
-                                            </button>
-                                        </fieldset>
-                                    </div>
+                                        <div class="col-md-5 mt-4 mb-4">
+                                            <fieldset>
+                                                <button type="submit" id="form-submit" class="btn contact_button mt-2 mt-md-0 mt-lg-0" name="submit">
+                                                    Submit!
+                                                </button>
+                                            </fieldset>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
@@ -216,10 +225,10 @@ if(isset($_REQUEST['subscribe'])){
                 <div class="col-md-12 mt-2">
                     <div class="social-icons">
                         <ul class="d-flex justify-content-center">
-                            <li><a href=""><i class="fa fa-facebook mt-2"></i></a></li>
-                            <li class="ml-4"><a href="#"><i class="fa fa-twitter mt-2"></i></a></li>
-                            <li class="ml-4"><a href="#"><i class="fa fa-linkedin mt-2"></i></a></li>
-                            <li><a href="#" class="ml-4"><i class="fa fa-rss mt-2"></i></a></li>
+                            <li><a href=""><i class="fab fa-facebook mt-2"></i></a></li>
+                            <li class="ml-4"><a href="#"><i class="fab fa-whatsapp mt-2"></i></a></li>
+                            <li class="ml-4"><a href="#"><i class="fab fa-linkedin mt-2"></i></a></li>
+                            <li><a href="#" class="ml-4"><i class="fab fa-instagram mt-2"></i></a></li>
                         </ul>
                     </div>
                 </div>
@@ -227,24 +236,16 @@ if(isset($_REQUEST['subscribe'])){
         </div>
     </div>
 
-    <!-- Bootstrap core JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
-        crossorigin="anonymous"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script src="./vendor/jquery/jquery.slim.min.js"></script>
+    
+  <script src="./vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Additional Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
-        integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-    <!-- Additional Scripts -->
-    <script src="assets/js/main.js"></script>
+  <!-- Additional Scripts -->
+  <script src="./vendor/jquery/jquery.min.js"></script>
+  <script src="./vendor/others/js/owl.js"></script>
+  <!-- Additional Scripts -->
+  <script src="assets/js/main.js"></script>
 
     <script>
         // spinner
