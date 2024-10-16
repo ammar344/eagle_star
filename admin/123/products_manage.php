@@ -24,7 +24,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_REQUEST['upload'])) {
     $productPrice = $conn->real_escape_string($_REQUEST['product_price']);
     $productCode = $conn->real_escape_string($_REQUEST['productCode']);
     $productType = $conn->real_escape_string($_REQUEST['productType']);
-    $productionRate = $conn->real_escape_string($_REQUEST['productionRate']);
     $description = $conn->real_escape_string($_REQUEST['description']);
 
     foreach ($_FILES['images']['name'] as $key => $name) {
@@ -56,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_REQUEST['upload'])) {
             // Upload image to the server
             if (move_uploaded_file($_FILES['images']['tmp_name'][$key], $filePath)) {
                 $imagePath = $conn->real_escape_string($filePath);
-                $insert = "INSERT INTO products (product_name, image, productType, productionRate, price, productCode, description) VALUES ('$productName', '$imageName', '$productType', '$productionRate','$productPrice', '$productCode', '$description')";
+                $insert = "INSERT INTO products (product_name, image, productType, price, productCode, description) VALUES ('$productName', '$imageName', '$productType', '$productPrice', '$productCode', '$description')";
                 $insertQuery = mysqli_query($conn, $insert);
                 if ($insertQuery) {
                   echo "<script>

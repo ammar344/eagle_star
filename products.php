@@ -34,8 +34,16 @@ if (isset($_GET['page'])) {
 $product_per_page = 16;
 $start_from = ($page - 1) * $product_per_page;
 
+$search_query = isset($_GET['search_query']) ? mysqli_real_escape_string($conn, $_GET['search_query']) : '';
 
-$show = "SELECT * FROM products ORDER BY date DESC LIMIT $start_from, $product_per_page"; 
+if (!empty($search_query)) {
+  // with search
+  $show = "SELECT * FROM products WHERE product_name LIKE '%$search_query%' ORDER BY date DESC LIMIT $start_from, $product_per_page";
+} else {
+  // without search
+  $show = "SELECT * FROM products ORDER BY date DESC LIMIT $start_from, $product_per_page";
+}
+
 $show_query = mysqli_query($conn, $show);
 ?>
 
@@ -54,7 +62,7 @@ $show_query = mysqli_query($conn, $show);
   <link rel="stylesheet" href="./vendor/others/css/owl.css" />
 
   <link rel="stylesheet" href="./vendor/others/css/owl.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <!-- custom css -->
   <link rel="stylesheet" href="./assets/css/style.css" />
 
@@ -119,11 +127,31 @@ $show_query = mysqli_query($conn, $show);
     <div class="featured-page">
       <div class="container">
         <div class="row">
-          <div class="col-md-4 col-sm-12">
+          <div class="col-md-6 col-sm-12">
             <div class="section-heading">
               <div class="line"></div>
               <h1 class="heading">Our Products</h1>
             </div>
+          </div>
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col-md-8 mt-4 mt-md-0 mt-lg-0">
+                <form action="" method="get">
+                  <fieldset>
+                    <input type="text" name="search_query" class="form-control mt-4" id="name" placeholder="Search Here...">
+                  </fieldset>
+              </div>
+              <div class="col-md-4 mt-4 mt-md-0 mt-lg-0">
+                <fieldset>
+                  <button type="submit" id="form-submit" class="btn search_button mt-4" name="search">
+                    Search
+                  </button>
+                </fieldset>
+                </form>
+              </div>
+            </div>
+
+
           </div>
         </div>
       </div>
@@ -174,21 +202,26 @@ $show_query = mysqli_query($conn, $show);
       </div>
 
       <?php
+
 $pr_query = "SELECT * FROM products";
+if (!empty($search_query)) {
+    $pr_query .= " WHERE product_name LIKE '%$search_query%'";
+}
+
 $pr_result = mysqli_query($conn, $pr_query);
 $total_record = mysqli_num_rows($pr_result);
 
-$product_per_page = 16; // Assuming you want 10 products per page
+$product_per_page = 16; 
 $total_pages = ceil($total_record / $product_per_page);
 
 echo '<div class="container mt-4">';
 echo '<nav aria-label="...">';
 echo '<ul class="pagination justify-content-center">';
 
-// Previous button (disabled if on the first page)
+// Previous button
 if (isset($_GET['page']) && $_GET['page'] > 1) {
     $prev_page = $_GET['page'] - 1;
-    echo '<li class="page-item"><a class="page-link" href="products.php?page=' . $prev_page . '">Previous</a></li>';
+    echo '<li class="page-item"><a class="page-link" href="products.php?page=' . $prev_page . '&search_query=' . $search_query . '">Previous</a></li>';
 } else {
     echo '<li class="page-item disabled"><a class="page-link">Previous</a></li>';
 }
@@ -196,16 +229,16 @@ if (isset($_GET['page']) && $_GET['page'] > 1) {
 // Page numbers
 for ($i = 1; $i <= $total_pages; $i++) {
     if (isset($_GET['page']) && $_GET['page'] == $i) {
-        echo '<li class="page-item active active-page" aria-current="page"><a class="page-link active-page" href="products.php?page=' . $i . '">' . $i . '</a></li>';
+        echo '<li class="page-item active active-page" aria-current="page"><a class="page-link active-page" href="products.php?page=' . $i . '&search_query=' . $search_query . '">' . $i . '</a></li>';
     } else {
-        echo '<li class="page-item"><a class="page-link" href="products.php?page=' . $i . '">' . $i . '</a></li>';
+        echo '<li class="page-item"><a class="page-link" href="products.php?page=' . $i . '&search_query=' . $search_query . '">' . $i . '</a></li>';
     }
 }
 
-// Next button (disabled if on the last page)
+// Next button
 if (isset($_GET['page']) && $_GET['page'] < $total_pages) {
     $next_page = $_GET['page'] + 1;
-    echo '<li class="page-item"><a class="page-link" href="products.php?page=' . $next_page . '">Next</a></li>';
+    echo '<li class="page-item"><a class="page-link" href="products.php?page=' . $next_page . '&search_query=' . $search_query . '">Next</a></li>';
 } elseif (!isset($_GET['page']) || $_GET['page'] == $total_pages) {
     echo '<li class="page-item disabled"><a class="page-link">Next</a></li>';
 }
@@ -213,6 +246,7 @@ if (isset($_GET['page']) && $_GET['page'] < $total_pages) {
 echo '</ul>';
 echo '</nav>';
 echo '</div>';
+
 ?>
 
 
