@@ -138,7 +138,7 @@ $show_query = mysqli_query($conn, $show);
               <div class="col-md-8 mt-4 mt-md-0 mt-lg-0">
                 <form action="" method="get">
                   <fieldset>
-                    <input type="text" name="search_query" class="form-control mt-4" id="name" placeholder="Search Here...">
+                    <input type="text" name="search_query" class="form-control mt-4" id="name" placeholder="Search Here..." required>
                   </fieldset>
               </div>
               <div class="col-md-4 mt-4 mt-md-0 mt-lg-0">
@@ -272,7 +272,7 @@ echo '</div>';
                 <div class="row">
                   <div class="col-md-7">
                     <fieldset>
-                      <input type="email" name="semail" id="" placeholder="Enter your email" class="form-control" />
+                      <input type="email" name="semail" id="" placeholder="Enter your email" class="form-control" required/>
                     </fieldset>
                   </div>
                   <div class="col-md-5">

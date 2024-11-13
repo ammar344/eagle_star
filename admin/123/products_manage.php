@@ -199,7 +199,7 @@ $showQuery = mysqli_query($conn, $show);
                         </div>
                         <div class="mb-3 col-md-6">
                           <label for="language" class="form-label">Product type</label>
-                          <select id="language" class="select2 form-select" name="productType">
+                          <select id="language" class="select2 form-select" name="productType" required>
                             <option value="">Select Product Type</option>
                             <option value="Featured">Featured</option>
                             <option value="common">Common</option>
@@ -208,12 +208,12 @@ $showQuery = mysqli_query($conn, $show);
                         <div class="mb-3 col-md-6">
                           <label for="organization" class="form-label">Product Price</label>
                           <input type="number" class="form-control" name="product_price"
-                            placeholder="Enter Product Price" />
+                            placeholder="Enter Product Price" required/>
                         </div>
                         <div class="mb-3 col-md-12">
                           <label for="organization" class="form-label">Product Description</label>
                           <textarea class="form-control" name="description"
-                            placeholder="Enter product's description" rows="7"></textarea>
+                            placeholder="Enter product's description" rows="7" required></textarea>
                         </div>
                       </div>
                       <div class="mt-2">
@@ -287,6 +287,7 @@ $showQuery = mysqli_query($conn, $show);
                           <div class="dropdown-menu">
                             <a class="dropdown-item" href="server.php?deleteId=<?php echo $pId ?>"><i
                                 class="bx bx-trash me-1"></i> Delete</a>
+                                <a class="dropdown-item" href="update_product.php?updateId=<?php echo $pId ?>"><i class='bx bx-shield-plus'></i> Update</a>
                           </div>
                         </div>
                       </td>

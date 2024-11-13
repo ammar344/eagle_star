@@ -170,6 +170,9 @@ a {
   font-weight: 700;
   margin-bottom: 0px;
 }
+.owl-card .featured-item{
+  min-height: 300px;
+}
 .owl-theme .owl-dots {
   text-align: center;
   margin-top: 30px;
@@ -430,7 +433,7 @@ a {
 	display: inline-block;
 	/* text-align: center; */
 	outline: none;
-	border: none !important;
+	/* border: none !important; */
 }
 .order-button{
   background-color: var(--primary-color) !important;

@@ -182,7 +182,7 @@ if(isset($_REQUEST['subscribe'])){
                                     <div class="col-md-7">
                                         <fieldset>
                                             <input type="email" name="semail" id="" placeholder="Enter your email"
-                                                class="form-control" />
+                                                class="form-control" required/>
                                         </fieldset>
                                     </div>
                                     <div class="col-md-5">

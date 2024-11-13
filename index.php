@@ -23,7 +23,7 @@ if(isset($_REQUEST['subscribe'])){
     }
 }
 
-$show = "SELECT * FROM products WHERE productType = 'featured'";
+$show = "SELECT * FROM products WHERE productType = 'featured' ORDER BY date DESC";
 $show_query = mysqli_query($conn, $show);
 ?>
 <!DOCTYPE html>
@@ -118,7 +118,7 @@ $show_query = mysqli_query($conn, $show);
                     </div>
                     <div class="col-md-12">
                         <div class="col-md-12">
-                            <div class="owl-carousel owl-theme">
+                            <div class="owl-carousel owl-theme owl-card">
                                 <?php
                                 // show data in card from database
                                 while ($row = mysqli_fetch_assoc($show_query)) {
@@ -158,12 +158,12 @@ $show_query = mysqli_query($conn, $show);
                     </div>
                     <div class="col-md-8 offset-md-2">
                         <div class="container">
-                            <form id="subscribe" action="admin/server.php" method="get">
+                            <form id="subscribe" action="" method="get">
                                 <div class="row">
                                     <div class="col-md-7">
                                         <fieldset>
                                             <input type="email" name="semail" id="" placeholder="Enter your email"
-                                                class="form-control" />
+                                                class="form-control" required/>
                                         </fieldset>
                                     </div>
                                     <div class="col-md-5">

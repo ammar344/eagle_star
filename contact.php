@@ -46,19 +46,19 @@ if (isset($_REQUEST['subscribe'])) {
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Elite Hosiery & Garments</title>
-  <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Elite Hosiery & Garments</title>
+    <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico" />
 
-  <!-- bootstrap css -->
-  <link rel="stylesheet" href="./vendor/bootstrap/css/bootstrap.min.css">
-  <!-- other css -->
-  <link rel="stylesheet" href="./vendor/others/css/owl.css" />
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="./vendor/bootstrap/css/bootstrap.min.css">
+    <!-- other css -->
+    <link rel="stylesheet" href="./vendor/others/css/owl.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-  <!-- custom css -->
-  <link rel="stylesheet" href="./assets/css/style.css" />
+    <!-- custom css -->
+    <link rel="stylesheet" href="./assets/css/style.css" />
 
 </head>
 
@@ -102,14 +102,14 @@ if (isset($_REQUEST['subscribe'])) {
                 $count = count($_SESSION['cart']);
             }
             ?>
-            <li class="nav-item cart">
-              <a class="nav-link" href="my_cart.php"><i class="fas fa-shopping-cart"></i>
-                <span class="cart-count">
-                  <?php echo $count; ?>
-                </span>
-              </a>
+                        <li class="nav-item cart">
+                            <a class="nav-link" href="my_cart.php"><i class="fas fa-shopping-cart"></i>
+                                <span class="cart-count">
+                                    <?php echo $count; ?>
+                                </span>
+                            </a>
 
-            </li>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -131,7 +131,10 @@ if (isset($_REQUEST['subscribe'])) {
                     </div>
                     <div class="col-md-6">
                         <div id="map">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d215.71371778760968!2d73.07392874285077!3d31.408234308525145!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x392242b0745ee219%3A0x9dbfb24b2427e1c!2sQuaid-e-Azam%20Market%2C%20Sir%20Syed%20Town%2C%20Faisalabad%2C%20Punjab%2C%20Pakistan!5e0!3m2!1sen!2s!4v1723966280127!5m2!1sen!2s" width="100%" height="450" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d215.71371778760968!2d73.07392874285077!3d31.408234308525145!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x392242b0745ee219%3A0x9dbfb24b2427e1c!2sQuaid-e-Azam%20Market%2C%20Sir%20Syed%20Town%2C%20Faisalabad%2C%20Punjab%2C%20Pakistan!5e0!3m2!1sen!2s!4v1723966280127!5m2!1sen!2s"
+                                width="100%" height="450" style="border:0;" allowfullscreen loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -141,27 +144,35 @@ if (isset($_REQUEST['subscribe'])) {
                                     <div class="row">
                                         <div class="col-md-6 mt-4 mt-md-0 mt-lg-0">
                                             <fieldset>
-                                                <input type="text" name="name" class="form-control" id="name" placeholder="Enter Name...">
+                                                <input type="text" name="name" class="form-control" id="name"
+                                                    placeholder="Enter Name...">
                                             </fieldset>
                                         </div>
                                         <div class="col-md-6 mt-4 mt-md-0 mt-lg-0">
                                             <fieldset>
-                                                <input type="email" name="cemail" class="form-control" id="email" placeholder="Enter Email...">
+                                                <input type="email" name="cemail" class="form-control" id="email"
+                                                    placeholder="Enter Email...">
                                             </fieldset>
                                         </div>
                                         <div class="col-md-12 mt-4">
                                             <fieldset>
-                                                <input type="text" name="subject" class="form-control" id="subject" placeholder="Subject...">
+                                                <select id="language" class="select2 form-control form-select" name="subject">
+                                                    <option value="">Select Message or Review</option>
+                                                    <option value="Message">Message</option>
+                                                    <option value="Review">Review</option>
+                                                </select>
                                             </fieldset>
                                         </div>
                                         <div class="col-md-12 mt-4">
                                             <fieldset>
-                                                <textarea name="message" id="message" rows="6" class="form-control" placeholder="Enter your message here..."></textarea>
+                                                <textarea name="message" id="message" rows="6" class="form-control"
+                                                    placeholder="Enter your message here..."></textarea>
                                             </fieldset>
                                         </div>
                                         <div class="col-md-5 mt-4 mb-4">
                                             <fieldset>
-                                                <button type="submit" id="form-submit" class="btn contact_button mt-2 mt-md-0 mt-lg-0" name="submit">
+                                                <button type="submit" id="form-submit"
+                                                    class="btn contact_button mt-2 mt-md-0 mt-lg-0" name="submit">
                                                     Submit!
                                                 </button>
                                             </fieldset>
@@ -193,12 +204,13 @@ if (isset($_REQUEST['subscribe'])) {
                                     <div class="col-md-7">
                                         <fieldset>
                                             <input type="email" name="semail" id="" placeholder="Enter your email"
-                                                class="form-control" />
+                                                class="form-control" required/>
                                         </fieldset>
                                     </div>
                                     <div class="col-md-5">
                                         <fieldset>
-                                            <button type="submit" id="form-submit" class="btn button mt-2 mt-md-0 mt-lg-0" name="subscribe">
+                                            <button type="submit" id="form-submit"
+                                                class="btn button mt-2 mt-md-0 mt-lg-0" name="subscribe">
                                                 Subscribe Now!
                                             </button>
                                         </fieldset>
@@ -236,16 +248,16 @@ if (isset($_REQUEST['subscribe'])) {
         </div>
     </div>
 
-  <!-- Bootstrap core JavaScript -->
-  <script src="./vendor/jquery/jquery.slim.min.js"></script>
-    
-  <script src="./vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script src="./vendor/jquery/jquery.slim.min.js"></script>
 
-  <!-- Additional Scripts -->
-  <script src="./vendor/jquery/jquery.min.js"></script>
-  <script src="./vendor/others/js/owl.js"></script>
-  <!-- Additional Scripts -->
-  <script src="assets/js/main.js"></script>
+    <script src="./vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Additional Scripts -->
+    <script src="./vendor/jquery/jquery.min.js"></script>
+    <script src="./vendor/others/js/owl.js"></script>
+    <!-- Additional Scripts -->
+    <script src="assets/js/main.js"></script>
 
     <script>
         // spinner
